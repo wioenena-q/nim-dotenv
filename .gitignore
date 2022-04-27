@@ -1,2 +1,5 @@
 # Dirs
 .vscode
+
+# Files
+*.exe
