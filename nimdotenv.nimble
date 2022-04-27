@@ -13,4 +13,4 @@ requires "nim >= 1.6.4"
 
 task test, "Run load test":
   withDir "tests":
-    exec "nim c -r load.nim"
+    exec "nim c --hints:off -r load.nim "
