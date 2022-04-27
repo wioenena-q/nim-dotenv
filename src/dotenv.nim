@@ -1,7 +1,11 @@
-# This is just an example to get you started. A typical library package
-# exports the main API in this file. Note that you cannot rename this file
-# but you can remove it if you wish.
+from os import getAppDir, DirSep, putEnv
+from strutils import split, startsWith
 
-proc add*(x, y: int): int =
-  ## Adds two files together.
-  return x + y
+proc load*(filepath: string = getAppDir() & DirSep & ".env"): void =
+  let content = readFile(filepath)
+  let lines = split(content, "\n")
+  for line in lines:
+    if startsWith(line, "#"):
+      continue
+    let keyVal = split(line, "=")
+    putEnv(keyVal[0], keyVal[1])
