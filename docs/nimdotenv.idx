@@ -1,0 +1,1 @@
+load	nimdotenv.html#load,string	nimdotenv: load(filepath: string = getAppDir() &amp; DirSep &amp; &quot;.env&quot;): void	
