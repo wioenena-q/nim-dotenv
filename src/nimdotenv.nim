@@ -1,11 +1,21 @@
-from os import getAppDir, DirSep, putEnv
-from strutils import split, startsWith, isEmptyOrWhitespace
+from os import getAppDir, DirSep
+from strutils import splitLines, startsWith, isEmptyOrWhitespace, split, strip
+from tables import initTable, `[]=`, Table
+from sequtils import filter
+from sugar import `=>`
 
-proc load*(filepath: string = getAppDir() & DirSep & ".env"): void =
-  let content = readFile(filepath)
-  let lines = split(content, "\n")
+
+proc load*(filepath: string = getAppDir() & DirSep & ".env"): Table[string, string] =
+  ## Load environment variables from a .env files.
+  var env = initTable[string, string]()
+  
+  let contents = readFile(filepath);
+
+  let lines = contents.splitLines.filter(line => not (line.startsWith('#') or line.isEmptyOrWhitespace)) # Split lines, filter comments and empty lines
+
   for line in lines:
-    if startsWith(line, "#") or isEmptyOrWhiteSpace(line):
-      continue
-    let keyVal = split(line, "=")
-    putEnv(keyVal[0], keyVal[1])
+    let keyVal = line.split '='
+    env[keyVal[0].strip] = keyVal[1].strip
+
+  result = env
+
